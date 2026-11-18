@@ -1,0 +1,45 @@
+{
+    "appliances_epp": {
+        "column": {
+            "entity_id": true,
+            "code": true,
+            "name": true,
+            "description": true,
+            "min_price": true,
+            "max_price": true,
+            "retail_price": true,
+            "years": true,
+            "details_url": true,
+            "details_pdf_path": true,
+            "enabled": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "APPLIANCES_EPP_ENABLED": true,
+            "APPLIANCES_EPP_MIN_PRICE_MAX_PRICE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "APPLIANCES_EPP_CODE": true
+        }
+    },
+    "quote_item": {
+        "column": {
+            "delivery_date": true,
+            "epp_plan_code": true,
+            "epp_plan_name": true,
+            "epp_plan_price": true,
+            "epp_plan_years": true
+        }
+    },
+    "sales_order_item": {
+        "column": {
+            "delivery_date": true,
+            "epp_plan_code": true,
+            "epp_plan_name": true,
+            "epp_plan_price": true,
+            "epp_plan_years": true
+        }
+    }
+}

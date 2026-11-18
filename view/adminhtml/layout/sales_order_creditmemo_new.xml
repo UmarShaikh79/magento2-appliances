@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="creditmemo_totals">
+            <block class="MageTips\Appliances\Block\Adminhtml\Creditmemo\Totals\EppTotal"
+                   name="appliances_creditmemo_epp_total"/>
+        </referenceBlock>
+    </body>
+</page>

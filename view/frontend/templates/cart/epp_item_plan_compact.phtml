@@ -1,0 +1,34 @@
+<?php
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * Compact, read-only protection-plan line for the multishipping
+ * "Ship to Multiple Addresses" page, where the item table is narrow
+ * and plans cannot be edited (they are set on the cart page).
+ *
+ * @var \MageTips\Appliances\Block\Cart\EppItemPlan $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$plan = $block->getCurrentPlan();
+if ($plan === null) {
+    return;
+}
+
+$years = (int)$plan->getYears();
+?>
+<div class="appliances-epp-compact">
+    <span class="appliances-epp-compact__check" aria-hidden="true">&#10003;</span>
+    <span class="appliances-epp-compact__label">
+        <?= $escaper->escapeHtml(__('Protection Plan')) ?>:
+        <?php if ($years > 0): ?>
+            <?= /* @noEscape */ (int)$years ?>
+            <?= $escaper->escapeHtml($years === 1 ? (string)__('Year') : (string)__('Years')) ?>
+            &ndash;
+        <?php endif; ?>
+        <?= $escaper->escapeHtml($block->formatPrice((float)$plan->getRetailPrice())) ?>
+    </span>
+</div>

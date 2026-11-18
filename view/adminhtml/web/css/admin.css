@@ -1,0 +1,28 @@
+/**
+ * MageTips_Appliances admin menu icon
+ *
+ * Replaces Magento's default hexagon icon-font glyph with the MageTips logo.
+ * The data-ui-id is derived from menu.xml id "MageTips_Appliances::appliances".
+ *
+ * Specificity note: Magento compiles ".admin__menu .level-0 > a:before" (0,2,1).
+ * We add ".admin__menu" to match that level, then !important to guarantee the win.
+ */
+
+.admin__menu [data-ui-id="menu-magetips-appliances-appliances"] > a::before {
+    /* Strip the hexagon icon-font character completely */
+    content: '' !important;
+    font-family: inherit !important;
+    font-size: 0 !important;
+
+    /* Replace with MageTips logo (crisp SVG glyph) */
+    display: block !important;
+    background: url('../images/menu-icon.svg') no-repeat center center / contain !important;
+    background-color: transparent !important;
+    width: 100%;
+    height: 5rem !important;
+    margin: 0 auto 0.3rem;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-mask: none !important;
+    mask: none !important;
+}

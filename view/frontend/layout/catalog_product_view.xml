@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * Injects the delivery date widget below the Add to Cart button on PDP.
+ * The block itself checks is_appliance and config enabled — it renders
+ * nothing if either condition is false.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="MageTips_Appliances::css/product/delivery-date.css"/>
+    </head>
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="appliances.core.delivery.date"
+                   template="MageTips_Appliances::product/delivery-date.phtml"
+                   after="product.info">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">MageTips\Appliances\ViewModel\Product\DeliveryDate</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

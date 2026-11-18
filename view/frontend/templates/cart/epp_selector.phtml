@@ -1,0 +1,242 @@
+<?php
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ *
+ * @var \MageTips\Appliances\Block\Cart\EppSelector $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+if (!$block->hasApplianceItems()): return;
+endif;
+
+$applianceItems   = $block->getApplianceItems();
+$allPlans         = $block->getAllPlans();
+$coveredItems     = $block->getCoveredItems();
+$selectedPlan     = $block->getSelectedPlan();
+$hasPlan          = $block->hasPlanSelected();
+$selectedPlanCode = $block->getSelectedPlanCode();
+$detailsUrl       = $block->getDetailsUrl();
+$totalCost        = $block->getTotalEppCost();
+$coveredCount     = count($coveredItems);
+$iconUrl          = $block->getProtectionIconUrl();
+$shieldSrc        = $iconUrl ?: $block->getViewFileUrl('MageTips_Appliances::images/shield.svg');
+?>
+
+<!-- ── Summary Bar ────────────────────────────────────────────────────── -->
+<div id="appliances-epp-selector">
+
+    <!-- Shield badge -->
+    <div class="epp-summary-badge">
+        <img src="<?= $escaper->escapeUrl($shieldSrc) ?>"
+             alt="<?= $escaper->escapeHtmlAttr(__('Protection Plan')) ?>"
+             width="38" height="47">
+        <p class="epp-summary-badge-label">PROTECTION<br>PLAN</p>
+    </div>
+
+    <!-- Plan name + subtitle -->
+    <div class="epp-summary-info">
+        <p class="epp-summary-title">
+            <?= $escaper->escapeHtml(__('Complete Protection Plan')) ?>
+            <span class="epp-summary-title-sub">
+                - <?= $escaper->escapeHtml(__('One plan for all your appliances')) ?>
+            </span>
+        </p>
+        <p class="epp-summary-subtitle">
+            <?= $escaper->escapeHtml(__('Save more on purchase of 2 or more protection plans for your appliances.')) ?>
+            <?php if ($detailsUrl): ?>
+                <a href="<?= $escaper->escapeUrl($detailsUrl) ?>" target="_blank"
+                   class="epp-summary-details-link">
+                    <?= $escaper->escapeHtml(__('More Details')) ?>
+                </a>
+            <?php endif; ?>
+        </p>
+    </div>
+
+    <!-- Right: plan info + button -->
+    <?php if ($hasPlan && $selectedPlan): ?>
+    <div class="epp-summary-right-plan">
+        <span class="epp-summary-covered">
+            <?= /* @noEscape */ (int)$coveredCount ?>&nbsp;<?= $escaper->escapeHtml(
+                $coveredCount === 1 ? __('Appliance') : __('Appliances')
+            ) ?>
+            &nbsp;/&nbsp;<?= $escaper->escapeHtml(__('Protection Plan')) ?>
+        </span>
+        <span class="epp-summary-sep">|</span>
+        <span class="epp-summary-total">
+            <?= $escaper->escapeHtml($block->formatPrice($totalCost)) ?>
+        </span>
+        <span class="epp-summary-sep">|</span>
+        <button type="button" id="epp-manage-btn" class="epp-summary-manage-btn">
+            <?= $escaper->escapeHtml(__('MANAGE')) ?>
+        </button>
+    </div>
+    <?php else: ?>
+    <div class="epp-summary-right-noPlan">
+        <button type="button" id="epp-manage-btn" class="epp-summary-add-btn">
+            <?= $escaper->escapeHtml(__('ADD PROTECTION')) ?>
+        </button>
+    </div>
+    <?php endif; ?>
+
+</div><!-- /#appliances-epp-selector -->
+
+
+<!-- ── Manage Modal ───────────────────────────────────────────────────── -->
+<div id="epp-manage-modal" class="epp-manage-modal-root" style="display:none;">
+
+    <!-- Blue benefits box -->
+    <div class="epp-modal-benefits-box">
+        <!-- Shield (larger, for modal) -->
+        <div class="epp-modal-badge">
+            <img src="<?= $escaper->escapeUrl($shieldSrc) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr(__('Protection Plan')) ?>"
+                 width="54" height="67">
+            <p class="epp-modal-badge-label">PROTECTION<br>PLAN</p>
+        </div>
+        <!-- Benefits grid -->
+        <div class="epp-modal-benefits-content">
+            <p class="epp-modal-benefits-title">
+                <?= $escaper->escapeHtml(__('Complete Protection Plan - One plan for all your appliances.')) ?>
+            </p>
+            <div class="epp-modal-benefits-grid">
+                <?php
+                $benefits = [
+                    __('Repaired to the manufacturer\'s specifications.'),
+                    __('10% off parts and labour (at participating service centers).'),
+                    __('Services offered evenings and weekends (where available).'),
+                ];
+                foreach ($benefits as $benefit): ?>
+                <p class="epp-modal-benefit-item">
+                    <span class="epp-modal-checkmark">&#10003;</span>
+                    <?= $escaper->escapeHtml($benefit) ?>
+                </p>
+                <?php endforeach; ?>
+                <?php if ($detailsUrl): ?>
+                <p class="epp-modal-details-p">
+                    <a href="<?= $escaper->escapeUrl($detailsUrl) ?>" target="_blank"
+                       class="epp-details-link">
+                        <?= $escaper->escapeHtml(__('More Details')) ?>
+                    </a>
+                </p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items section header -->
+    <div class="epp-modal-items-header">
+        <span class="epp-modal-items-header-label">
+            <?= $escaper->escapeHtml(__('Select eligible items to protect.')) ?>
+        </span>
+        <label class="epp-modal-select-all-label">
+            <input type="checkbox" id="epp-select-all" class="epp-modal-select-all-checkbox">
+            <span class="epp-modal-select-all-span">
+                <?= $escaper->escapeHtml(__('Select All')) ?>
+            </span>
+        </label>
+    </div>
+
+    <!-- Item rows -->
+    <?php foreach ($applianceItems as $item): ?>
+    <div class="epp-modal-item-row">
+        <div class="epp-modal-item-inner">
+            <?php if ($item['image_url']): ?>
+            <img src="<?= $escaper->escapeUrl($item['image_url']) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr($item['name']) ?>"
+                 class="epp-modal-item-img">
+            <?php endif; ?>
+            <div class="epp-modal-item-info">
+                <p class="epp-modal-item-price">
+                    <?= $escaper->escapeHtml($block->formatPrice($item['price'])) ?>
+                </p>
+                <p class="epp-modal-item-name">
+                    <?= $escaper->escapeHtml($item['name']) ?>
+                </p>
+                <p class="epp-modal-item-sku">
+                    <?= $escaper->escapeHtml(__('SKU:')) ?>&nbsp;<?= $escaper->escapeHtml($item['sku']) ?>
+                </p>
+            </div>
+            <!-- Checkbox + Select label -->
+            <label class="epp-modal-item-checkbox-label">
+                <input type="checkbox"
+                       class="epp-item-checkbox"
+                       value="<?= /* @noEscape */ (int)$item['item_id'] ?>"
+                       data-price="<?= /* @noEscape */ number_format((float)$item['price'], 2, '.', '') ?>"
+                    <?= /* @noEscape */ ($item['current_epp_code'] !== '') ? 'checked="checked"' : '' ?>>
+                <span class="epp-modal-item-select-span">
+                    <?= $escaper->escapeHtml(__('Select')) ?>
+                </span>
+            </label>
+        </div>
+    </div>
+    <?php endforeach; ?>
+
+    <!-- Plan selection row -->
+    <div class="epp-modal-plan-row">
+        <div class="epp-modal-plan-row-inner">
+            <span class="epp-modal-plan-title">
+                <?= $escaper->escapeHtml(__('Select Your Plan')) ?>
+            </span>
+            <?php foreach ($allPlans as $idx => $plan): ?>
+                <?php
+                $isFirst    = ($idx === 0);
+                $isSelected = ($selectedPlanCode === $plan['code'])
+                    || ($selectedPlanCode === '' && $isFirst);
+                ?>
+            <label class="epp-modal-plan-label">
+                <input type="radio"
+                       name="epp_modal_plan"
+                       class="epp-plan-radio"
+                       value="<?= $escaper->escapeHtmlAttr($plan['code']) ?>"
+                       data-price="<?= /* @noEscape */ number_format((float)$plan['retail_price'], 2, '.', '') ?>"
+                    <?= /* @noEscape */ $isSelected ? 'checked="checked"' : '' ?>>
+                <span class="epp-modal-plan-years">
+                    <?php if ($plan['years']): ?>
+                        <?= /* @noEscape */ (int)$plan['years'] ?>&nbsp;<?= $escaper->escapeHtml(__('YEARS')) ?>
+                    <?php endif; ?>
+                </span>
+                <span class="epp-modal-plan-price">
+                    &ndash;&nbsp;<?= $escaper->escapeHtml($block->formatPrice($plan['retail_price'])) ?>
+                </span>
+            </label>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- Footer: total + UPDATE -->
+    <div class="epp-modal-footer">
+        <p class="epp-modal-footer-total">
+            <?= $escaper->escapeHtml(__('Protection Plan Total:')) ?>&nbsp;
+            <strong id="epp-modal-total">
+                <?= $escaper->escapeHtml($block->formatPrice(0.0)) ?>
+            </strong>
+        </p>
+        <button type="button" id="epp-modal-update-btn">
+            <?= $escaper->escapeHtml(__('UPDATE')) ?>
+        </button>
+    </div>
+
+</div><!-- /#epp-manage-modal -->
+
+
+<script type="text/x-magento-init">
+{
+    "#appliances-epp-selector": {
+        "MageTips_Appliances/js/cart/epp-selector": {
+            "updateUrl":       "<?= $escaper->escapeJs($block->getUpdateUrl()) ?>",
+            "modalTitle":      "<?= $escaper->escapeJs($block->getModalTitle()) ?>",
+            "hasPlanSelected": <?= $hasPlan ? 'true' : 'false' ?>,
+            "currencySymbol":  "<?= $escaper->escapeJs($block->getCurrencySymbol()) ?>"
+        }
+    }
+}
+</script>

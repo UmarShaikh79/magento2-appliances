@@ -1,0 +1,98 @@
+/**
+ * Appliances_Core Module
+ * Delivery date widget — PDP
+ */
+
+:root {
+    --appliances-blue: #0d4f8b;
+    --appliances-blue-dark: #0a3d6b;
+    --appliances-blue-link: #006bb4;
+    --appliances-text: #1b1b1b;
+    --appliances-text-muted: #555;
+    --appliances-muted-bg: #f0f0f0;
+    --appliances-muted-fg: #999;
+}
+
+.appliances-delivery-widget {
+    border: 2px solid var(--appliances-blue);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 18px 0;
+    background: #fff;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.appliances-delivery-widget .delivery-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    color: var(--appliances-text);
+}
+
+.appliances-delivery-widget .delivery-header svg {
+    color: var(--appliances-blue);
+    flex-shrink: 0;
+}
+
+.appliances-delivery-widget .delivery-headline {
+    margin: 0 0 4px;
+    color: var(--appliances-text);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.appliances-delivery-widget .delivery-change-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--appliances-blue-link);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.appliances-delivery-widget .delivery-change-btn:hover {
+    color: var(--appliances-blue-dark);
+}
+
+.appliances-delivery-widget .delivery-subtext {
+    margin: 4px 0 0;
+    color: var(--appliances-text-muted);
+    font-size: 1rem;
+}
+
+.appliances-delivery-widget .delivery-selected {
+    display: none;
+    margin: 8px 0 0;
+    color: var(--appliances-text);
+    font-size: 1.1rem;
+}
+
+.appliances-delivery-widget .delivery-clear-btn {
+    background: none;
+    border: none;
+    padding: 0 0 0 8px;
+    color: #888;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.appliances-delivery-widget .delivery-clear-btn:hover {
+    color: var(--appliances-blue-dark);
+}
+
+/* jQuery UI datepicker holiday marker — muted "unavailable day" styling */
+.ui-datepicker .delivery-holiday a {
+    background: var(--appliances-muted-bg) !important;
+    color: var(--appliances-muted-fg) !important;
+}

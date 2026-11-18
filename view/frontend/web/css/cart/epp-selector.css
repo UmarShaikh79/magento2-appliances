@@ -1,0 +1,707 @@
+/**
+ * Appliances_Core — Protection plan cart UI
+ *
+ * 1. Summary bar above cart items (#appliances-epp-selector)
+ * 2. Per-item plan boxes injected by plugin (epp-item-plan-tbody)
+ * 3. Kent.com-style MANAGE modal (epp-kent-modal)
+ */
+
+/* ── Brand palette ────────────────────────────────────────────────────── */
+
+:root {
+    --appliances-green: #009A44;       /* primary brand green */
+    --appliances-green-dark: #007a35;  /* hover / active green */
+    --appliances-blue: #0d4f8b;        /* label / accent blue */
+    --appliances-blue-link: #0d5096;   /* inline link blue */
+    --appliances-text: #1b1b1b;        /* near-black heading text */
+}
+
+/* ── Kent.com modal width & inner scroll ──────────────────────────────── */
+
+.epp-kent-modal .modal-inner-wrap {
+    max-width: 780px !important;
+    width: 95% !important;
+}
+
+.epp-kent-modal .modal-content {
+    padding: 20px !important;
+}
+
+/* ── Summary bar (above cart table) ──────────────────────────────────── */
+
+#appliances-epp-selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f4f9f4;
+    border: 1px solid #b7d9ba;
+    border-radius: 3px;
+    padding: 10px 16px;
+    margin-bottom: 14px;
+}
+
+.epp-summary-badge {
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.epp-summary-badge img,
+.epp-summary-badge svg {
+    display: block;
+    margin: 0 0 0 4px;
+    object-fit: contain;
+}
+
+.epp-summary-badge-label {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #0d4f8b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+}
+
+.epp-summary-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.epp-summary-title {
+    margin: 0 0 3px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--appliances-text);
+}
+
+.epp-summary-title-sub {
+    font-weight: 400;
+    color: #555;
+}
+
+.epp-summary-subtitle {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.epp-summary-details-link {
+    color: var(--appliances-green);
+    text-decoration: underline;
+    margin-left: 4px;
+}
+
+.epp-summary-details-link:hover {
+    color: var(--appliances-green-dark);
+}
+
+.epp-summary-right-plan {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.15rem;
+    white-space: nowrap;
+}
+
+.epp-summary-covered {
+    color: var(--appliances-green);
+    font-weight: 600;
+}
+
+.epp-summary-sep {
+    color: #bbb;
+    margin: 0 8px;
+}
+
+.epp-summary-total {
+    font-weight: 700;
+    color: var(--appliances-green);
+}
+
+.epp-summary-manage-btn {
+    background: transparent;
+    color: var(--appliances-green);
+    border: none;
+    padding: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.epp-summary-manage-btn:hover {
+    opacity: 0.85;
+}
+
+.epp-summary-right-noPlan {
+    flex-shrink: 0;
+}
+
+.epp-summary-add-btn {
+    background: var(--appliances-green);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 18px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+}
+
+.epp-summary-add-btn:hover {
+    background: var(--appliances-green-dark);
+}
+
+/* ── Manage Modal ─────────────────────────────────────────────────────── */
+
+.epp-modal-benefits-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #dbe8f5;
+    border: 1px solid #b0cde8;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+}
+
+.epp-modal-badge {
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.epp-modal-badge img,
+.epp-modal-badge svg {
+    display: block;
+    object-fit: contain;
+}
+
+.epp-modal-badge-label {
+    margin: 3px 0 0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #0d4f8b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+}
+
+.epp-modal-benefits-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.epp-modal-benefits-title {
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0a3d6b;
+}
+
+.epp-modal-benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+}
+
+.epp-modal-benefit-item {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+}
+
+.epp-modal-checkmark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    background: var(--appliances-green);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.epp-modal-details-p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.epp-modal-details-p .epp-details-link {
+    font-weight: 600;
+}
+
+/* ── Modal items section ──────────────────────────────────────────────── */
+
+.epp-modal-items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.epp-modal-items-header-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--appliances-text);
+}
+
+.epp-modal-select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.epp-modal-select-all-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--appliances-green);
+    cursor: pointer;
+}
+
+.epp-modal-select-all-span {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.epp-modal-item-row {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 8px;
+}
+
+.epp-modal-item-row:has(.epp-item-checkbox:checked) {
+    border-color: var(--appliances-green-dark);
+    background: #f0faf2;
+}
+
+.epp-modal-item-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+}
+
+.epp-modal-item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+
+.epp-modal-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.epp-modal-item-price {
+    margin: 0 0 3px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--appliances-text);
+}
+
+.epp-modal-item-name {
+    margin: 0 0 3px;
+    font-size: 0.95rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.epp-modal-item-sku {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.epp-modal-item-checkbox-label {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    min-width: 50px;
+}
+
+.epp-item-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--appliances-green);
+    cursor: pointer;
+}
+
+.epp-modal-item-select-span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* ── Plan selection row ───────────────────────────────────────────────── */
+
+.epp-modal-plan-row {
+    background: #f7f7f7;
+    border: 1px solid #e8e8e8;
+    border-radius: 3px;
+    padding: 12px 14px;
+    margin-top: 4px;
+}
+
+.epp-modal-plan-row-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.epp-modal-plan-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--appliances-text);
+    white-space: nowrap;
+}
+
+.epp-modal-plan-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.epp-plan-radio {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--appliances-green);
+    cursor: pointer;
+}
+
+.epp-modal-plan-years {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--appliances-text);
+}
+
+.epp-modal-plan-price {
+    font-size: 1.05rem;
+    color: #444;
+}
+
+/* ── Modal footer ─────────────────────────────────────────────────────── */
+
+.epp-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f0f0;
+    padding: 14px 20px;
+    margin: 16px -20px -20px;
+    border-top: 1px solid #ddd;
+}
+
+.epp-modal-footer-total {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+}
+
+#epp-modal-total {
+    font-size: 1.3rem;
+    color: var(--appliances-green);
+}
+
+#epp-modal-update-btn {
+    background: var(--appliances-green);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+#epp-modal-update-btn:hover:not(:disabled) {
+    background: var(--appliances-green-dark);
+}
+
+#epp-modal-update-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Table cell reset ─────────────────────────────────────────────────── */
+
+.epp-item-plan-cell {
+    padding: 0 !important;
+    border-top: none !important;
+    border-bottom: 8px solid #f0f0f0 !important;
+}
+
+/* ── Outer box ────────────────────────────────────────────────────────── */
+
+.epp-item-plan-box {
+    border: 1px solid #d5d5d5;
+    border-top: none;
+    background: #fff;
+    font-family: inherit;
+}
+
+/* ── Green header bar ─────────────────────────────────────────────────── */
+
+.epp-item-plan-header {
+    background: var(--appliances-green);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 7px 16px;
+    letter-spacing: 0.01em;
+}
+
+/* ── Body: icon + info + coverage-area + actions ──────────────────────── */
+
+.epp-item-plan-body {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+/* ── Shield / badge icon ──────────────────────────────────────────────── */
+
+.epp-item-plan-icon {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 60px;
+    text-align: center;
+}
+
+.epp-item-plan-icon img {
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
+}
+
+.epp-item-plan-icon svg {
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
+}
+
+.epp-item-plan-icon-label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #0d4f8b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* ── Plan info text ───────────────────────────────────────────────────── */
+
+.epp-item-plan-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.epp-item-plan-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 2px;
+}
+
+.epp-item-plan-tagline {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0;
+}
+
+.epp-details-link {
+    color: #0d5096;
+    text-decoration: underline;
+}
+
+.epp-details-link:hover {
+    color: var(--appliances-green-dark);
+}
+
+/* ── Coverage area (count + plan dropdown) ────────────────────────────── */
+
+.epp-item-plan-coverage-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.epp-item-plan-coverage-count {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--appliances-green);
+}
+
+.epp-plan-select {
+    border: 2px solid var(--appliances-green);
+    border-radius: 3px;
+    padding: 7px 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    background: #fff;
+    cursor: pointer;
+    min-width: 190px;
+    max-width: 240px;
+    align-self: flex-start;
+}
+
+/* ── Action buttons ───────────────────────────────────────────────────── */
+
+.epp-item-plan-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ADD PROTECTION — green outline, fills on hover */
+.epp-btn-add {
+    background: #fff;
+    color: var(--appliances-green);
+    border: 2px solid var(--appliances-green);
+    border-radius: 3px;
+    padding: 7px 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.epp-btn-add:hover:not(:disabled) {
+    background: var(--appliances-green);
+    color: #fff;
+}
+
+/* REMOVE — grey outline */
+.epp-btn-remove {
+    background: #fff;
+    color: #666;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 6px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.epp-btn-remove:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #888;
+    color: #333;
+}
+
+/* ADDED TO CART — green fill, disabled (status indicator) */
+.epp-btn-added {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--appliances-green);
+    color: #fff;
+    border: 2px solid var(--appliances-green);
+    border-radius: 3px;
+    padding: 7px 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: default;
+    white-space: nowrap;
+}
+
+.epp-checkmark {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+/* Disabled state for add/remove while AJAX in flight */
+.epp-item-plan-actions button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+    .epp-item-plan-body {
+        flex-wrap: wrap;
+    }
+
+    .epp-item-plan-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .epp-item-plan-icon {
+        display: none;
+    }
+
+    .epp-item-plan-body {
+        padding: 10px 12px;
+    }
+}
+
+/* ── Compact read-only line (multishipping "Ship to Multiple Addresses") ── */
+.appliances-epp-compact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 8px;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: #333;
+}
+
+.appliances-epp-compact__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--appliances-green);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.appliances-epp-compact__label {
+    font-weight: 600;
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="appliances" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Appliances</label>
+            <tab>sales</tab>
+            <resource>MageTips_Appliances::appliances_config</resource>
+
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Appliances Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+            </group>
+
+            <group id="delivery" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Delivery Date Widget</label>
+
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Delivery Widget</label>
+                    <comment>Show estimated delivery date on appliance product pages.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="lead_days" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Lead Days</label>
+                    <comment>Minimum number of delivery days from today (counting only enabled delivery days).</comment>
+                    <validate>required-entry validate-greater-than-zero validate-digits</validate>
+                </field>
+
+                <field id="monday" translate="label" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Monday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="tuesday" translate="label" type="select" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tuesday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="wednesday" translate="label" type="select" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Wednesday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="thursday" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Thursday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="friday" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Friday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="saturday" translate="label" type="select" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Saturday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="sunday" translate="label" type="select" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sunday Deliveries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="holidays" translate="label comment" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Holiday Blackout Dates</label>
+                    <comment>One date per line in YYYY-MM-DD format. These dates are skipped when calculating delivery dates and disabled in the calendar picker.</comment>
+                </field>
+
+                <field id="headline" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Headline Text</label>
+                    <comment>Use {date} as placeholder for the calculated date. Example: "Earliest {date} if ordered now."</comment>
+                </field>
+
+                <field id="subtext" translate="label comment" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sub-text</label>
+                    <comment>Optional additional text shown below the headline. HTML allowed.</comment>
+                </field>
+
+            </group>
+
+            <group id="epp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Extended Protection Plan (EPP)</label>
+
+                <field id="protection_icon" translate="label comment" type="image" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Protection Plan Icon</label>
+                    <comment>Upload a custom icon (PNG, JPG, GIF, SVG, WebP). Leave empty to use the default blue shield SVG.</comment>
+                    <backend_model>MageTips\Appliances\Model\Config\Backend\ProtectionIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">appliances/epp/icon</upload_dir>
+                    <base_url type="media" scope_info="1">appliances/epp/icon</base_url>
+                </field>
+
+                <field id="protection_plan_box_title" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Protection Plan Box Title</label>
+                    <comment>The green header title shown above each item's protection plan box on the cart page.</comment>
+                </field>
+
+                <field id="modal_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Manage Modal Title</label>
+                    <comment>Title of the popup modal when customers click MANAGE / ADD PROTECTION (e.g. "Kent's Protection Plan").</comment>
+                </field>
+
+            </group>
+
+        </section>
+    </system>
+</config>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="MageTips_Appliances::css/cart/epp-selector.css"/>
+    </head>
+    <body>
+        <!-- Override cart form template via the template ATTRIBUTE (not <argument>).
+             Magento\Checkout\Block\Cart\Grid::_construct() calls setTemplate(getData('template'))
+             at construction time, before <argument> values merge in — so an <argument name="template">
+             is ignored. The template attribute is applied via setTemplate() after construction and wins.
+             Our form.phtml renders form_before INSIDE <form class="form-cart"> so the EPP bar stays
+             within the left column and aligns with the cart items instead of floating against the summary. -->
+        <referenceBlock name="checkout.cart.form" template="MageTips_Appliances::cart/form.phtml">
+            <block class="MageTips\Appliances\Block\Cart\EppSelector"
+                   name="appliances.cart.epp.selector"
+                   as="form_before"
+                   before="-"
+                   template="MageTips_Appliances::cart/epp_selector.phtml"/>
+        </referenceBlock>
+
+        <!-- Per-item EPP boxes are injected via Plugin\Cart\Item\RendererPlugin -->
+
+        <referenceBlock name="checkout.cart.totals">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="block-totals" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="appliances-epp-charge" xsi:type="array">
+                                    <item name="component" xsi:type="string">MageTips_Appliances/js/view/checkout/summary/epp-charge</item>
+                                    <item name="sortOrder" xsi:type="string">26</item>
+                                    <item name="config" xsi:type="array">
+                                        <item name="title" xsi:type="string" translate="true">Protection Plans</item>
+                                        <item name="template" xsi:type="string">MageTips_Appliances/checkout/summary/epp-charge</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">epp_form.appliances_epp_data_source</item>
+        </item>
+        <item name="label" translate="true" xsi:type="string">EPP Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="back" class="MageTips\Appliances\Block\Adminhtml\Epp\Edit\BackButton"/>
+            <button name="delete" class="MageTips\Appliances\Block\Adminhtml\Epp\Edit\DeleteButton"/>
+            <button name="save" class="MageTips\Appliances\Block\Adminhtml\Epp\Edit\SaveButton"/>
+        </buttons>
+        <namespace>epp_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>epp_form.appliances_epp_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="appliances_epp_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="appliances/epp/save"/>
+        </settings>
+        <dataProvider class="MageTips\Appliances\Ui\DataProvider\EppFormDataProvider" name="appliances_epp_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <fieldset name="general">
+        <settings>
+            <collapsible>false</collapsible>
+            <label translate="true">EPP Details</label>
+        </settings>
+
+        <field name="entity_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
+
+        <field name="code" sortOrder="10" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Code</label>
+                <dataScope>code</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <notice translate="true">Unique identifier, e.g. EPP_2YR_STD</notice>
+            </settings>
+        </field>
+
+        <field name="name" sortOrder="20" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+                <dataScope>name</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="description" sortOrder="30" formElement="textarea">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Description</label>
+                <dataScope>description</dataScope>
+            </settings>
+        </field>
+
+        <field name="min_price" sortOrder="40" formElement="input">
+            <settings>
+                <dataType>number</dataType>
+                <label translate="true">Min Price ($)</label>
+                <dataScope>min_price</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
+                <notice translate="true">Minimum product price this plan applies to</notice>
+            </settings>
+        </field>
+
+        <field name="max_price" sortOrder="50" formElement="input">
+            <settings>
+                <dataType>number</dataType>
+                <label translate="true">Max Price ($)</label>
+                <dataScope>max_price</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
+                <notice translate="true">Maximum product price this plan applies to</notice>
+            </settings>
+        </field>
+
+        <field name="retail_price" sortOrder="60" formElement="input">
+            <settings>
+                <dataType>number</dataType>
+                <label translate="true">Retail Price ($)</label>
+                <dataScope>retail_price</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="years" sortOrder="70" formElement="input">
+            <settings>
+                <dataType>number</dataType>
+                <label translate="true">Years</label>
+                <dataScope>years</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+                <notice translate="true">Coverage duration in years</notice>
+            </settings>
+        </field>
+
+        <field name="details_url" sortOrder="80" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Details URL</label>
+                <dataScope>details_url</dataScope>
+                <validation>
+                    <rule name="validate-url" xsi:type="boolean">true</rule>
+                </validation>
+                <notice translate="true">Optional link to plan details page</notice>
+            </settings>
+        </field>
+
+        <field name="details_pdf_path" sortOrder="90" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Details PDF Path</label>
+                <dataScope>details_pdf_path</dataScope>
+                <notice translate="true">Path to PDF relative to media directory</notice>
+            </settings>
+        </field>
+
+        <field name="enabled" sortOrder="100" formElement="select">
+            <settings>
+                <dataType>select</dataType>
+                <label translate="true">Enabled</label>
+                <dataScope>enabled</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Enabledisable"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

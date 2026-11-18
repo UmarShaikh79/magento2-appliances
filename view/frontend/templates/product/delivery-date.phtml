@@ -1,0 +1,56 @@
+<?php
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \MageTips\Appliances\ViewModel\Product\DeliveryDate $viewModel
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/** @var \MageTips\Appliances\ViewModel\Product\DeliveryDate $viewModel */
+$viewModel = $block->getViewModel();
+
+if (!$viewModel || !$viewModel->isEnabled() || !$viewModel->isAppliance()) {
+    return;
+}
+
+?>
+<?php $pickerConfig = $viewModel->getPickerConfigJson(); ?>
+<div class="appliances-delivery-widget"
+     data-mage-init='{"MageTips_Appliances/js/product/delivery-date": <?= /* @noEscape */ $pickerConfig ?>}'>
+
+    <div class="delivery-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+            <rect x="1" y="3" width="15" height="13" rx="1"/>
+            <path d="M16 8h4l3 5v3h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        <span><?= $escaper->escapeHtml(__('Delivery')) ?></span>
+    </div>
+
+    <p class="delivery-headline">
+        <?= $escaper->escapeHtml($viewModel->getHeadline()) ?>
+        <button type="button" class="delivery-change-btn"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Select a different delivery date')) ?>">
+            <?= $escaper->escapeHtml(__('Change')) ?>
+        </button>
+    </p>
+
+    <?php if ($subtext = $viewModel->getSubtext()): ?>
+    <p class="delivery-subtext"><?= $escaper->escapeHtml($subtext) ?></p>
+    <?php endif; ?>
+
+    <p class="delivery-selected">
+        <?= $escaper->escapeHtml(__('Preferred delivery date:')) ?>
+        <strong class="delivery-selected-date"></strong>
+        <button type="button" class="delivery-clear-btn"><?= $escaper->escapeHtml(__('Clear')) ?></button>
+    </p>
+
+    <input type="hidden" class="delivery-date-input" name="delivery_date" value="">
+</div>

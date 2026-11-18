@@ -1,0 +1,20 @@
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+
+# Static analysis
+phpstan.neon
+.phpstan/
+
+# Composer generated
+/vendor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

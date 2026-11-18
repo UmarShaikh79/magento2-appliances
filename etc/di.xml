@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Preferences for interfaces -->
+    <preference for="MageTips\Appliances\Api\EppRepositoryInterface"
+                type="MageTips\Appliances\Model\EppRepository"/>
+
+    <preference for="MageTips\Appliances\Api\Data\EppInterface"
+                type="MageTips\Appliances\Model\Epp"/>
+
+    <preference for="MageTips\Appliances\Api\ApplianceDetectorInterface"
+                type="MageTips\Appliances\Model\Appliance\Detector"/>
+
+    <!-- Virtual type for collection -->
+    <virtualType name="MageTips\Appliances\Model\ResourceModel\Epp\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">appliances_epp</argument>
+            <argument name="resourceModel" xsi:type="string">MageTips\Appliances\Model\ResourceModel\Epp</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Plugin: inject per-item EPP plan box after each cart item row -->
+    <type name="Magento\Checkout\Block\Cart\Item\Renderer">
+        <plugin name="magetips_appliances_epp_item_plan"
+                type="MageTips\Appliances\Plugin\Cart\Item\RendererPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: add EPP plan name to customer-section cart data (mini-cart, cart sidebars).
+         Placed on ItemPool so it fires for ALL product types. -->
+    <type name="Magento\Checkout\CustomerData\ItemPool">
+        <plugin name="magetips_appliances_epp_customer_data"
+                type="MageTips\Appliances\Plugin\Checkout\CustomerData\AddEppDataPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: add EPP plan name to window.checkoutConfig.quoteItemData so the
+         checkout sidebar KnockoutJS template can display it. -->
+    <type name="Magento\Checkout\Model\DefaultConfigProvider">
+        <plugin name="magetips_appliances_epp_checkout_config"
+                type="MageTips\Appliances\Plugin\Checkout\Model\AddEppToCheckoutConfigPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: show EPP sub-row + delivery date on frontend order detail (My Account → Orders → View) -->
+    <type name="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer">
+        <plugin name="magetips_appliances_order_item_epp_delivery"
+                type="MageTips\Appliances\Plugin\Sales\Order\Item\Renderer\AddEppAndDeliveryPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: show EPP sub-row + delivery date in admin Items Ordered / Invoice / Credit Memo columns.
+         The admin name column template calls $block->getOrderOptions() on DefaultColumn, not getItemOptions()
+         on the renderer — so we hook DefaultColumn instead of DefaultRenderer. -->
+    <type name="Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn">
+        <plugin name="magetips_appliances_admin_order_item_epp_delivery"
+                type="MageTips\Appliances\Plugin\Sales\Adminhtml\Items\Column\AddEppAndDeliveryPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: show EPP sub-row + delivery date in order confirmation email items -->
+    <type name="Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder">
+        <plugin name="magetips_appliances_email_order_item_epp_delivery"
+                type="MageTips\Appliances\Plugin\Sales\Order\Email\Items\Order\AddEppAndDeliveryPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: show EPP sub-row + delivery date in invoice and credit memo email items -->
+    <type name="Magento\Sales\Block\Order\Email\Items\DefaultItems">
+        <plugin name="magetips_appliances_email_invoice_creditmemo_item_epp_delivery"
+                type="MageTips\Appliances\Plugin\Sales\Order\Email\Items\AddEppAndDeliveryPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin: copy all MageTips_Appliances columns from quote_item → sales_order_item on order placement -->
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="magetips_appliances_order_item_columns"
+                type="MageTips\Appliances\Plugin\Quote\Item\ToOrderItemPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Data provider for admin grid -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="appliances_epp_data_source" xsi:type="string">MageTips\Appliances\Model\ResourceModel\Epp\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

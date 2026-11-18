@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="quote">
+        <group name="totals">
+            <!-- After shipping (300), before tax (450) -->
+            <item name="appliances_epp_charge"
+                  instance="MageTips\Appliances\Model\Quote\Total\EppCharge"
+                  sort_order="360"/>
+        </group>
+    </section>
+
+    <!-- Adds EPP charge to invoice grand total during collection (sort after shipping=150, before grand_total=350) -->
+    <section name="order_invoice">
+        <group name="totals">
+            <item name="appliances_epp_charge"
+                  instance="MageTips\Appliances\Model\Order\Invoice\Total\EppCharge"
+                  sort_order="280"/>
+        </group>
+    </section>
+
+    <!-- Adds EPP charge to credit memo grand total during collection -->
+    <section name="order_creditmemo">
+        <group name="totals">
+            <item name="appliances_epp_charge"
+                  instance="MageTips\Appliances\Model\Order\Creditmemo\Total\EppCharge"
+                  sort_order="280"/>
+        </group>
+    </section>
+</config>

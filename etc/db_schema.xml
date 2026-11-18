@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <table name="appliances_epp" resource="default" engine="innodb" comment="Appliances EPP Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="50" comment="EPP Code"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="EPP Name"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+        <column xsi:type="decimal" name="min_price" scale="2" precision="10" nullable="false" comment="Min Product Price"/>
+        <column xsi:type="decimal" name="max_price" scale="2" precision="10" nullable="false" comment="Max Product Price"/>
+        <column xsi:type="decimal" name="retail_price" scale="2" precision="10" nullable="false" comment="EPP Cost"/>
+        <column xsi:type="int" name="years" padding="11" nullable="false" comment="Years of Coverage"/>
+        <column xsi:type="varchar" name="details_url" nullable="true" length="500" comment="Details URL"/>
+        <column xsi:type="varchar" name="details_pdf_path" nullable="true" length="500" comment="PDF Path"/>
+        <column xsi:type="smallint" name="enabled" padding="5" nullable="false" default="1" comment="Enable Flag"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Update Time"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+        <constraint xsi:type="unique" referenceId="APPLIANCES_EPP_CODE">
+            <column name="code"/>
+        </constraint>
+
+        <index referenceId="APPLIANCES_EPP_ENABLED" indexType="btree">
+            <column name="enabled"/>
+        </index>
+
+        <index referenceId="APPLIANCES_EPP_PRICE_RANGE" indexType="btree">
+            <column name="min_price"/>
+            <column name="max_price"/>
+        </index>
+    </table>
+
+    <!-- quote_item extensions: delivery date + EPP plan details for cart integrations -->
+    <table name="quote_item" resource="default" engine="innodb" comment="Sales Flat Quote Item">
+        <column xsi:type="date"    name="delivery_date"  nullable="true" comment="Customer Selected Delivery Date"/>
+        <column xsi:type="varchar" name="epp_plan_code"  nullable="true" length="50"  comment="Selected EPP Plan Code"/>
+        <column xsi:type="varchar" name="epp_plan_name"  nullable="true" length="255" comment="EPP Plan Name at Time of Selection"/>
+        <column xsi:type="decimal" name="epp_plan_price" nullable="true" scale="2" precision="10" comment="EPP Plan Price at Time of Selection"/>
+        <column xsi:type="smallint" name="epp_plan_years" nullable="true" comment="EPP Plan Years of Coverage"/>
+    </table>
+
+    <!-- sales_order_item extensions: delivery date + EPP plan details for ERP/fulfilment integrations -->
+    <table name="sales_order_item" resource="default" engine="innodb" comment="Sales Flat Order Item">
+        <column xsi:type="date"    name="delivery_date"  nullable="true" comment="Customer Selected Delivery Date"/>
+        <column xsi:type="varchar" name="epp_plan_code"  nullable="true" length="50"  comment="Selected EPP Plan Code"/>
+        <column xsi:type="varchar" name="epp_plan_name"  nullable="true" length="255" comment="EPP Plan Name at Time of Order"/>
+        <column xsi:type="decimal" name="epp_plan_price" nullable="true" scale="2" precision="10" comment="EPP Plan Price at Time of Order"/>
+        <column xsi:type="smallint" name="epp_plan_years" nullable="true" comment="EPP Plan Years of Coverage"/>
+    </table>
+
+</schema>

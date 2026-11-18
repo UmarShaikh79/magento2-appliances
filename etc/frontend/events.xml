@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <!-- Captures delivery_date POST param and saves it to the quote item column -->
+    <event name="checkout_cart_product_add_after">
+        <observer name="magetips_appliances_add_delivery_date_to_item"
+                  instance="MageTips\Appliances\Observer\Cart\AddDeliveryDateToItem"/>
+    </event>
+
+</config>

@@ -1,0 +1,212 @@
+<?php
+/**
+ * MageTips_Appliances Module
+ *
+ * Copyright © 2026 Muhammad Umar. All rights reserved.
+ * Licensed under the Open Software License (OSL 3.0).
+ *
+ * @category  MageTips
+ * @package   MageTips_Appliances
+ * @author    Muhammad Umar <umarshiekh619@gmail.com>
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+ * @link      https://github.com/UmarShaikh79/magento2-appliances
+ *
+ * @var \MageTips\Appliances\Block\Cart\EppItemPlan $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$item        = $block->getItem();
+$hasPlan     = $block->hasPlanSelected();
+$currentPlan = $block->getCurrentPlan();
+$currentCode = $block->getCurrentCode();
+$detailsUrl  = $block->getDetailsUrl();
+$plans       = $block->getPlans();
+$qty         = (int)$item->getQty();
+$itemId      = (int)$item->getId();
+$iconUrl     = $block->getProtectionIconUrl();
+$shieldSrc   = $iconUrl ?: $block->getViewFileUrl('MageTips_Appliances::images/shield.svg');
+$saveUrl     = $escaper->escapeUrl($block->getSaveUrl());
+$defaultCode = $escaper->escapeHtmlAttr($block->getDefaultPlanCode());
+$uniqueId    = 'epp-box-' . $itemId;
+?>
+<tbody class="epp-item-plan-tbody">
+<tr class="epp-item-plan-row">
+    <td class="epp-item-plan-cell" colspan="99">
+
+        <div id="<?= $escaper->escapeHtmlAttr($uniqueId) ?>" class="epp-item-plan-box">
+
+            <!-- ── Green header bar ─────────────────────────────────────── -->
+            <div class="epp-item-plan-header">
+                <?= $escaper->escapeHtml($block->getBoxTitle()) ?>
+            </div>
+
+            <!-- ── Body: icon | info | coverage+dropdown | buttons ──────── -->
+            <div class="epp-item-plan-body">
+
+                <!-- Shield badge -->
+                <div class="epp-item-plan-icon">
+                    <img src="<?= $escaper->escapeUrl($shieldSrc) ?>"
+                         alt="<?= $escaper->escapeHtmlAttr(__('Protection Plan')) ?>"
+                         width="48" height="60">
+                    <span class="epp-item-plan-icon-label">
+                        <?= $escaper->escapeHtml(__('PROTECTION')) ?><br>
+                        <?= $escaper->escapeHtml(__('PLAN')) ?>
+                    </span>
+                </div>
+
+                <!-- Plan description -->
+                <div class="epp-item-plan-info">
+                    <p class="epp-item-plan-name">
+                        <?= $escaper->escapeHtml(__('Complete Protection Plan')) ?>
+                    </p>
+                    <p class="epp-item-plan-tagline">
+                        <?= $escaper->escapeHtml(__('one plan for all your appliances.')) ?>
+                        <?php if ($detailsUrl): ?>
+                        <a href="<?= $escaper->escapeUrl($detailsUrl) ?>" target="_blank"
+                           class="epp-details-link">
+                            <?= $escaper->escapeHtml(__('More Details')) ?>
+                        </a>
+                        <?php endif; ?>
+                    </p>
+                </div>
+
+                <!-- Coverage info + plan dropdown (stacked) -->
+                <div class="epp-item-plan-coverage-area">
+                    <?php if ($hasPlan && $currentPlan): ?>
+                    <p class="epp-item-plan-coverage-count">
+                        <?= $escaper->escapeHtml(
+                            __(
+                                '%1 %2 / %3 YEARS',
+                                $qty,
+                                ($qty === 1 ? __('Appliance') : __('Appliances')),
+                                $currentPlan->getYears()
+                            )
+                        ) ?>
+                    </p>
+                    <?php endif; ?>
+
+                    <!-- Plan select — first plan pre-selected when no active plan -->
+                    <select id="<?= $escaper->escapeHtmlAttr($uniqueId) ?>-select"
+                            class="epp-plan-select">
+                        <?php foreach ($plans as $plan): ?>
+                            <?php
+                            $isSelected  = $hasPlan
+                                ? ($currentCode === $plan->getCode())
+                                : ($plan === reset($plans)); // pre-select first when no active plan
+                            $planPrice   = number_format((float)$plan->getRetailPrice(), 2, '.', '');
+                            ?>
+                        <option value="<?= $escaper->escapeHtmlAttr((string)$plan->getCode()) ?>"
+                                data-price="<?= /* @noEscape */ $planPrice ?>"
+                                <?= /* @noEscape */ $isSelected ? 'selected="selected"' : '' ?>>
+                            <?= /* @noEscape */ (int)$plan->getYears() ?> <?= $escaper->escapeHtml(__('Years')) ?>
+                            - <?= $escaper->escapeHtml($block->formatPrice((float)$plan->getRetailPrice())) ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Action buttons -->
+                <div id="<?= $escaper->escapeHtmlAttr($uniqueId) ?>-btns"
+                     class="epp-item-plan-actions">
+                    <?php if ($hasPlan): ?>
+                    <button type="button" class="epp-btn-remove"
+                            onclick="eppItemPlanRemove('<?= $escaper->escapeJs($uniqueId) ?>')">
+                        <?= $escaper->escapeHtml(__('REMOVE')) ?>
+                    </button>
+                    <button type="button" class="epp-btn-added" disabled>
+                        <span class="epp-checkmark">&#10003;</span>
+                        <?= $escaper->escapeHtml(__('ADDED')) ?>
+                    </button>
+                    <?php else: ?>
+                    <button type="button" class="epp-btn-add"
+                            onclick="eppItemPlanAdd('<?= $escaper->escapeJs($uniqueId) ?>')">
+                        <?= $escaper->escapeHtml(__('ADD PROTECTION')) ?>
+                    </button>
+                    <?php endif; ?>
+                </div>
+
+            </div><!-- /.epp-item-plan-body -->
+        </div><!-- /.epp-item-plan-box -->
+
+    </td>
+</tr>
+</tbody>
+
+<script>
+(function () {
+    var saveUrl = '<?= $escaper->escapeJs($block->getSaveUrl()) ?>';
+    var itemId  = <?= (int)$itemId ?>;
+    var hasPlan = <?= $hasPlan ? 'true' : 'false' ?>;
+    var boxId   = '<?= $escaper->escapeJs($uniqueId) ?>';
+
+    function getFormKey() {
+        var el = document.querySelector('input[name="form_key"]');
+        return el ? el.value : '';
+    }
+
+    function doSave(eppCode) {
+        var select = document.getElementById(boxId + '-select');
+        var btns   = document.getElementById(boxId + '-btns');
+        if (select) { select.disabled = true; }
+        if (btns) {
+            btns.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', saveUrl, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            try {
+                var resp = JSON.parse(xhr.responseText);
+                if (resp && resp.error) {
+                    alert(resp.error);
+                    if (select) { select.disabled = false; }
+                    if (btns) {
+                        btns.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
+                    }
+                    return;
+                }
+            } catch (e) {}
+            window.location.reload();
+        };
+        xhr.onerror = function () {
+            alert('An error occurred. Please try again.');
+            if (select) { select.disabled = false; }
+            if (btns) {
+                btns.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
+            }
+        };
+        xhr.send('item_id=' + encodeURIComponent(itemId)
+            + '&epp_code=' + encodeURIComponent(eppCode)
+            + '&form_key=' + encodeURIComponent(getFormKey()));
+    }
+
+    // Register this item's save function in a global registry keyed by boxId
+    window._eppItemRegistry = window._eppItemRegistry || {};
+    window._eppItemRegistry[boxId] = doSave;
+
+    // Define shared global handlers only once
+    if (!window.eppItemPlanAdd) {
+        window.eppItemPlanAdd = function (id) {
+            var sel = document.getElementById(id + '-select');
+            if (sel && sel.value && window._eppItemRegistry[id]) {
+                window._eppItemRegistry[id](sel.value);
+            }
+        };
+        window.eppItemPlanRemove = function (id) {
+            if (window._eppItemRegistry[id]) {
+                window._eppItemRegistry[id]('');
+            }
+        };
+    }
+
+    // Auto-save when plan is already active and dropdown changes
+    if (hasPlan) {
+        var sel = document.getElementById(boxId + '-select');
+        if (sel) {
+            sel.addEventListener('change', function () {
+                doSave(this.value || '');
+            });
+        }
+    }
+})();
+</script>
