@@ -3,7 +3,8 @@
 [![Magento](https://img.shields.io/badge/Magento-2.4.4--2.4.9-EC6737?logo=magento)](https://magento.com)
 [![PHP](https://img.shields.io/badge/PHP-8.1--8.5-777BB4?logo=php)](https://www.php.net)
 [![License: OSL-3.0](https://img.shields.io/badge/License-OSL--3.0-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](https://github.com/UmarShaikh79/magento2-appliances/releases)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/magetips/module-appliances.svg)](https://packagist.org/packages/magetips/module-appliances)
+[![Total Downloads](https://img.shields.io/packagist/dt/magetips/module-appliances.svg)](https://packagist.org/packages/magetips/module-appliances)
 [![PHPUnit](https://img.shields.io/badge/Tests-227%20passing-brightgreen)](#testing)
 
 ![MageTips Appliances — Extended Protection Plans & Delivery for Magento 2](docs/banner.png)
